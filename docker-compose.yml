@@ -1,6 +1,10 @@
 version: "3"
 services:
+  nginx:
+    image: "sbcmel/nginx-tech"
+    ports:
+      - "80:80"
   server:
     image: "sbcmel/apiserver"
     ports:
-      - "80:8080"
+      - "5000:8080"
