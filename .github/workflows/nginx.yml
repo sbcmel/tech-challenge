@@ -27,4 +27,4 @@ jobs:
         run: docker tag ${{secrets.DOCKER_USERNAME}}/nginx-tech:${{steps.vars.outputs.tag}} ${{secrets.DOCKER_USERNAME}}/nginx-tech:latest
       - name: Publish dockerimage to docker hub
         run: docker push ${{secrets.DOCKER_USERNAME}}/nginx-tech:latest
-       
+
