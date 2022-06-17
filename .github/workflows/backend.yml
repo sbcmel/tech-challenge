@@ -22,7 +22,8 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x apiserver/gradlew
       - name: Build with Gradle
-        run: ./apiserver/gradlew build
+        run: ./gradlew build
+        working-directory: apiserver
       - name: Get the version
         id: vars
         run: echo ::set-output name=tag::$(echo ${GITHUB_SHA:10})
