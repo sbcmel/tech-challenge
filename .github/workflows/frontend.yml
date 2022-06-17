@@ -1,0 +1,29 @@
+name: Deploy frontend
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get the version
+        id: vars
+        run: echo ::set-output name=tag::$(echo ${GITHUB_SHA:10})
+      - name: Docker login
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run : docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/frontend:${{steps.vars.outputs.tag}}
+        working-directory: frontend
+      - name: Publish dockerimage to docker hub
+        run: docker push ${{secrets.DOCKER_USERNAME}}/frontend:${{steps.vars.outputs.tag}}
+      - name: Change Tag to the latest
+        run: docker tag ${{secrets.DOCKER_USERNAME}}/frontend:${{steps.vars.outputs.tag}} ${{secrets.DOCKER_USERNAME}}/frontend:latest
+      - name: Publish dockerimage to docker hub
+        run: docker push ${{secrets.DOCKER_USERNAME}}/frontend:latest
