@@ -1,10 +1,12 @@
 version: "3"
 services:
-  nginx:
-    image: "sbcmel/nginx-tech"
-    ports:
-      - "80:80"
   server:
     image: "sbcmel/apiserver"
+    hostname: api
     ports:
       - "5000:8080"
+  nginx:
+    image: "sbcmel/nginx-tech"
+    hostname: nginx
+    ports:
+      - "80:80"
