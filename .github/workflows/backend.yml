@@ -42,7 +42,7 @@ jobs:
       - name: Publish dockerimage to docker hub
         run: docker push ${{secrets.DOCKER_USERNAME}}/apiserver:latest
       - name: Generate deployment package
-        run: zip -r deploy.zip . -x '*.git*'
+        run: zip -r ../deploy.zip . -x '*.git*'
         working-directory: apiserver
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v20
@@ -54,4 +54,4 @@ jobs:
           existing_bucket_name: elasticbeanstalk-us-west-2-748725899146
           region: us-west-2
           version_label: ${{ github.sha }}
-          deployment_package: apiserver\deploy.zip
+          deployment_package: deploy.zip
