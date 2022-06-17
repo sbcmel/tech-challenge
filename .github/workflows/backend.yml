@@ -38,7 +38,7 @@ jobs:
       - name: Publish dockerimage to docker hub
         run: docker push ${{secrets.DOCKER_USERNAME}}/apisever:${{steps.vars.outputs.tag}}
       - name: Change Tag to the latest
-        run: docker tag ${{secrets.DOCKER_USERNAME}}/apisever:${{steps.vars.outputs.tag}} ${{secrets.DOCKER_USERNAME}}/server-sample:latest
+        run: docker tag ${{secrets.DOCKER_USERNAME}}/apisever:${{steps.vars.outputs.tag}} ${{secrets.DOCKER_USERNAME}}/apiserver:latest
       - name: Publish dockerimage to docker hub
         run: docker push ${{secrets.DOCKER_USERNAME}}/apisever:latest
       - name: Generate deployment package
