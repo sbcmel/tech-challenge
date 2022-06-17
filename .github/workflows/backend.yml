@@ -33,14 +33,14 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run : docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/apisever:${{steps.vars.outputs.tag}}
+        run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/apiserver:${{steps.vars.outputs.tag}}
         working-directory: apiserver
       - name: Publish dockerimage to docker hub
-        run: docker push ${{secrets.DOCKER_USERNAME}}/apisever:${{steps.vars.outputs.tag}}
+        run: docker push ${{secrets.DOCKER_USERNAME}}/apiserver:${{steps.vars.outputs.tag}}
       - name: Change Tag to the latest
-        run: docker tag ${{secrets.DOCKER_USERNAME}}/apisever:${{steps.vars.outputs.tag}} ${{secrets.DOCKER_USERNAME}}/apiserver:latest
+        run: docker tag ${{secrets.DOCKER_USERNAME}}/apiserver:${{steps.vars.outputs.tag}} ${{secrets.DOCKER_USERNAME}}/apiserver:latest
       - name: Publish dockerimage to docker hub
-        run: docker push ${{secrets.DOCKER_USERNAME}}/apisever:latest
+        run: docker push ${{secrets.DOCKER_USERNAME}}/apiserver:latest
       - name: Generate deployment package
         run: zip -r deploy.zip . -x '*.git*'
         working-directory: apiserver
