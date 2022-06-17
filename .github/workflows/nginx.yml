@@ -1,10 +1,10 @@
-name: Deploy Rest API Server
+name: Deploy nginx-docker-image
 on:
   push:
     branches:
       - main
     paths:
-     - 'nginx-tech/**'
+     - 'nginx/**'
 jobs:
   build:
     runs-on: ubuntu-latest
