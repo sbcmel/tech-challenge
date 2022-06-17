@@ -1,5 +1,5 @@
 #specific image
-FROM adoptopenjdk/openjdk17:alpine-jre
+FROM openjdk:17.0.2-oraclelinux8
 
 #Label
 LABEL org.opencontainers.image.authors=sbcmel
