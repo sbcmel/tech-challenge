@@ -43,7 +43,6 @@ jobs:
         run: docker push ${{secrets.DOCKER_USERNAME}}/apiserver:latest
       - name: Generate deployment package
         run: zip -r ../deploy.zip . -x '*.git*'
-        working-directory: apiserver
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v20
         with:
