@@ -3,6 +3,8 @@ services:
   server:
     image: "sbcmel/apiserver"
     hostname: api
+    env_file:
+      - .env
   frontend:
     image: "sbcmel/frontend"
     hostname: client

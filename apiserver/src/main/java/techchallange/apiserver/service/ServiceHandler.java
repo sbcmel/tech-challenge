@@ -1,5 +1,6 @@
 package techchallange.apiserver.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,26 +18,24 @@ import java.util.Map.Entry;
 
 @Service
 public class ServiceHandler {
+    private final String apiKey;
 
-    public String doSomething() {
-        return "i did something!";
+    public ServiceHandler(@Value("#{environment.API_KEY}") String apiKey) {
+        this.apiKey = apiKey;
+        System.out.println(this.apiKey);
     }
 
     public List<AirpotModel> getAirport() {
         //make a rest api call to the airlab link
         final RestTemplate restTemplate = new RestTemplate();
-
         final HttpHeaders headers = new HttpHeaders();
         headers.set("api-key", "G9Tw58HE6HDzyq94HFmnd2yOymAuU32k2mEgL3oTVbhLl6E1opu5Hqxb5BASwCWv");
-
         //Create a new HttpEntity
         final HttpEntity<List<AirpotModel>> entity = new HttpEntity<List<AirpotModel>>(headers);
-
         ResponseEntity<List<AirpotModel>> response
                 = restTemplate.exchange("https://open-atms.airlab.aero/api/v1/airac/airports", HttpMethod.GET, entity,
                 new ParameterizedTypeReference<List<AirpotModel>>() {
                 });
-
         return response.getBody();
     }
 

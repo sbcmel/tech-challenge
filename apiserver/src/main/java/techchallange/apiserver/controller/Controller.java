@@ -20,30 +20,12 @@ public class Controller {
     }
 
     @GetMapping(value = "/sid2waypoints/{icao}")
-    public List<AirpotModel> geSID2Waypoints(@PathVariable String icao ) {
+    public List<AirpotModel> geSID2Waypoints(@PathVariable String icao) {
         return handler.getSID2Waypoints(icao);
-     }
-//    public List<SIDWayPointsModel> geSID2Waypoints(@PathVariable String icao ) {
-//        return handler.getSID2Waypoints(icao);
-//    }
+    }
 
     @GetMapping(value = "/stars2waypoints/{icao}")
-    public List<AirpotModel> geStar2Waypoints(@PathVariable String icao ) {
+    public List<AirpotModel> geStar2Waypoints(@PathVariable String icao) {
         return handler.getStars2Waypoints(icao);
-//    @GetMapping(value = "/stars2waypoints/{icao}")
-//    public HashMap<String, Integer> geStar2Waypoints(@PathVariable String icao ) {
-//        return handler.getStars2Waypoints(icao);
-    }
-//    @GetMapping(value = "/star2waypoints")
-//   public List<AirpotModel> gestar2Waypoints() {
-//          return handler.geSID2Waypoints();
- //   }
-
-
-
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String welcome()
-    {
-        return "welcome!!";
     }
 }
