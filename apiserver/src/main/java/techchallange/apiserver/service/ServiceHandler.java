@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import techchallange.apiserver.model.AirportWayPointModel;
 import techchallange.apiserver.model.AirpotModel;
-import techchallange.apiserver.model.SIDWayPointsModel;
+import techchallange.apiserver.model.WayPointsModel;
 import techchallange.apiserver.model.StarWayPointsModel;
 
 import java.util.*;
@@ -40,7 +40,7 @@ public class ServiceHandler {
         return response.getBody();
     }
 
-    public List<SIDWayPointsModel> getSID2Waypoints(String icao) {
+    public List<AirpotModel> getSID2Waypoints(String icao) {
         //make a rest api call to the rest link
         final RestTemplate restTemplate = new RestTemplate();
 
@@ -48,20 +48,22 @@ public class ServiceHandler {
         headers.set("api-key", "G9Tw58HE6HDzyq94HFmnd2yOymAuU32k2mEgL3oTVbhLl6E1opu5Hqxb5BASwCWv");
 
         //Create a new HttpEntity
-        final HttpEntity<List<SIDWayPointsModel>> entity = new HttpEntity<List<SIDWayPointsModel>>(headers);
+        final HttpEntity<List<WayPointsModel>> entity = new HttpEntity<List<WayPointsModel>>(headers);
 
         // String uri = http://my-rest-url.org/rest/account/{account};
 
 
-        ResponseEntity<List<SIDWayPointsModel>> response
+        ResponseEntity<List<WayPointsModel>> response
                 = restTemplate.exchange("https://open-atms.airlab.aero/api/v1/airac/sids/airport/{icao}", HttpMethod.GET, entity,
-                new ParameterizedTypeReference<List<SIDWayPointsModel>>() {
+                new ParameterizedTypeReference<List<WayPointsModel>>() {
                 }, icao);
 
-        return response.getBody();
+        List<AirpotModel> top2 = getTop2Waypoints(response.getBody());
+
+        return top2; //response.getBody();
     }
 
-    public List<StarWayPointsModel> getStars2Waypoints(String icao) {
+    public List<AirpotModel> getStars2Waypoints(String icao) {
         //make a rest api call to the rest link
         final RestTemplate restTemplate = new RestTemplate();
 
@@ -71,28 +73,29 @@ public class ServiceHandler {
         //Create a new HttpEntity
         final HttpEntity<List<StarWayPointsModel>> entity = new HttpEntity<List<StarWayPointsModel>>(headers);
 
-        ResponseEntity<List<StarWayPointsModel>> response
+        ResponseEntity<List<WayPointsModel>> response
                 = restTemplate.exchange("https://open-atms.airlab.aero/api/v1/airac/stars/airport/{icao}", HttpMethod.GET, entity,
-                new ParameterizedTypeReference<List<StarWayPointsModel>>() {
+                new ParameterizedTypeReference<List<WayPointsModel>>() {
                 }, icao);
 
-        getTop2Waypoints(response.getBody());
+        List<AirpotModel> top2 = getTop2Waypoints(response.getBody());
 
-
-        return response.getBody();
+        return top2;
     }
 
-    private HashMap<String, Integer> getTop2Waypoints(List<StarWayPointsModel> starModel) {
-        //int cnt = 0;
+    private List<AirpotModel> getTop2Waypoints(List<WayPointsModel> starModel) {
+        List<AirpotModel> top2waypoints = new ArrayList<>();
+        if (starModel.isEmpty()) {
+            return top2waypoints;
+        }
+
         String result = "";
         HashMap<String, Integer> wayPointLists = new HashMap<>();
 
-        for (StarWayPointsModel star : starModel) {
+        for (WayPointsModel star : starModel) {
             List<AirportWayPointModel> wpList = star.getWaypointList();
             for (AirportWayPointModel wp : wpList) {
-
                 String key = wp.getName();
-
                 if (wayPointLists.containsKey(key)) {
                     wayPointLists.put(key, wayPointLists.get(key) + 1);
                 } else {
@@ -101,32 +104,28 @@ public class ServiceHandler {
             }
         }
 
-        System.out.println(wayPointLists);
-
         List<Entry<String, Integer>> sortedList = new ArrayList<>(wayPointLists.entrySet());
         sortedList.sort(Entry.comparingByValue(Comparator.reverseOrder()));
 
         // test out using system out println
-        System.out.println("sorted !!");
         sortedList.forEach(item -> {
             System.out.println(item.getKey() + " value: " + item.getValue());
         });
 
-        //here
-        // List<String> listofStrings = new ArrayList<>();
-        HashMap<String, Integer> top2waypoints = new HashMap<>();
         int cnt = sortedList.get(0).getValue();
         for (int i = 0; i < sortedList.size(); i++) {
+            AirpotModel model = new AirpotModel();
             if (cnt == sortedList.get(i).getValue()) {
-                top2waypoints.put(sortedList.get(i).getKey(), sortedList.get(i).getValue());
+                model.setName(sortedList.get(i).getKey());
+                model.setWpFrequency(sortedList.get(i).getValue());
+                top2waypoints.add(model);
             } else if (cnt > (sortedList.get(i).getValue())) {
-                top2waypoints.put(sortedList.get(i).getKey(), sortedList.get(i).getValue());
+                model.setName(sortedList.get(i).getKey());
+                model.setWpFrequency(sortedList.get(i).getValue());
+                top2waypoints.add(model);
                 break;
             }
         }
-
-        // melvin test
-        top2waypoints.forEach((key, value) -> System.out.println(key + " " + value));
         return top2waypoints;
     }
 }

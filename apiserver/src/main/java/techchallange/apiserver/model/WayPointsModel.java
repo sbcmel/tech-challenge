@@ -6,15 +6,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SIDWayPointsModel {
+public class WayPointsModel {
 
-    public SIDWayPointsModel() {
-
+    public WayPointsModel(){
     }
 
-    public SIDWayPointsModel(String name,
-                             AirportWayPointModel airport,
-                             List<AirportWayPointModel> waypointList) {
+    public WayPointsModel(String name,
+                          AirportWayPointModel airport,
+                          List<AirportWayPointModel> waypointList) {
         this.name = name;
         this.airport = airport;
         this.waypointList = waypointList;

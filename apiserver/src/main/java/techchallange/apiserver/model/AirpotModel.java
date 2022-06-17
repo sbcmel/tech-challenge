@@ -6,18 +6,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AirpotModel {
 
-    public AirpotModel()
-    {
-
+    public AirpotModel() {
     }
-
-    public AirpotModel(String name, String icao) {
+    public AirpotModel(String name, String icao, int wpFrequency) {
         this.name = name;
         this.icao = icao;
+        this.wpFrequency =wpFrequency;
     }
 
     private String name;
     private String icao;
+    private int wpFrequency;
+    public int getWpFrequency() {
+        return wpFrequency;
+    }
+
+    public void setWpFrequency(int wpFrequency) {
+        this.wpFrequency = wpFrequency;
+    }
+
+
 
     public String getName() {
         return name;
