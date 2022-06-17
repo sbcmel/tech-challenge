@@ -22,18 +22,18 @@ public class ServiceHandler {
 
     public ServiceHandler(@Value("#{environment.API_KEY}") String apiKey) {
         this.apiKey = apiKey;
-        System.out.println(this.apiKey);
     }
 
     public List<AirpotModel> getAirport() {
         //make a rest api call to the airlab link
         final RestTemplate restTemplate = new RestTemplate();
         final HttpHeaders headers = new HttpHeaders();
-        headers.set("api-key", "G9Tw58HE6HDzyq94HFmnd2yOymAuU32k2mEgL3oTVbhLl6E1opu5Hqxb5BASwCWv");
+        headers.set("api-key", this.apiKey);
         //Create a new HttpEntity
         final HttpEntity<List<AirpotModel>> entity = new HttpEntity<List<AirpotModel>>(headers);
         ResponseEntity<List<AirpotModel>> response
-                = restTemplate.exchange("https://open-atms.airlab.aero/api/v1/airac/airports", HttpMethod.GET, entity,
+                = restTemplate.exchange("https://open-atms.airlab.aero/api/v1/airac/airports",
+                HttpMethod.GET, entity,
                 new ParameterizedTypeReference<List<AirpotModel>>() {
                 });
         return response.getBody();
@@ -42,9 +42,8 @@ public class ServiceHandler {
     public List<AirpotModel> getSID2Waypoints(String icao) {
         //make a rest api call to the rest link
         final RestTemplate restTemplate = new RestTemplate();
-
         final HttpHeaders headers = new HttpHeaders();
-        headers.set("api-key", "G9Tw58HE6HDzyq94HFmnd2yOymAuU32k2mEgL3oTVbhLl6E1opu5Hqxb5BASwCWv");
+        headers.set("api-key", this.apiKey);
 
         //Create a new HttpEntity
         final HttpEntity<List<WayPointsModel>> entity = new HttpEntity<List<WayPointsModel>>(headers);
@@ -65,20 +64,16 @@ public class ServiceHandler {
     public List<AirpotModel> getStars2Waypoints(String icao) {
         //make a rest api call to the rest link
         final RestTemplate restTemplate = new RestTemplate();
-
         final HttpHeaders headers = new HttpHeaders();
-        headers.set("api-key", "G9Tw58HE6HDzyq94HFmnd2yOymAuU32k2mEgL3oTVbhLl6E1opu5Hqxb5BASwCWv");
+        headers.set("api-key", this.apiKey);
 
         //Create a new HttpEntity
         final HttpEntity<List<StarWayPointsModel>> entity = new HttpEntity<List<StarWayPointsModel>>(headers);
-
         ResponseEntity<List<WayPointsModel>> response
                 = restTemplate.exchange("https://open-atms.airlab.aero/api/v1/airac/stars/airport/{icao}", HttpMethod.GET, entity,
                 new ParameterizedTypeReference<List<WayPointsModel>>() {
                 }, icao);
-
         List<AirpotModel> top2 = getTop2Waypoints(response.getBody());
-
         return top2;
     }
 
