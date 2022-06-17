@@ -127,8 +127,6 @@ public class ServiceHandler {
 
         // melvin test
         top2waypoints.forEach((key, value) -> System.out.println(key + " " + value));
-
-
         return top2waypoints;
     }
 }
