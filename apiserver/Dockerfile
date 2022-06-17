@@ -16,6 +16,6 @@ EXPOSE 8080
 EXPOSE 80
 
 WORKDIR '/app'
-COPY build/libs/*.jar /app/spring-boot-application.jar
+COPY build/libs/*SNAPSHOT.jar /app/spring-boot-application.jar
 CMD ["java", "-jar", "spring-boot-application.jar"]
 
