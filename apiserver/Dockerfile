@@ -17,5 +17,3 @@ EXPOSE 5000
 WORKDIR '/app'
 COPY build/libs/*SNAPSHOT.jar /app/spring-boot-application.jar
 CMD ["java", "-jar", "spring-boot-application.jar"]
-
-

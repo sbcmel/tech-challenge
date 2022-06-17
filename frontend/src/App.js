@@ -1,15 +1,12 @@
-
+import React from "react";
 import './App.css';
+import PostCreate from "./pages/PostCreate";
 
-import AirportList from './components/AirportList/AirportList';
-
-function App() {
+export const App = () => { 
   return (
-    <div className="App">
-       <h1>Hello world!</h1>
-       <AirportList/>
+    <div className="container">
+      <h1>Tech Challange!</h1>
+      <PostCreate />
     </div>
   );
-}
-
-export default App;
+};
