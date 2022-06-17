@@ -34,6 +34,7 @@ jobs:
         run : docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/apisever:${{steps.vars.outputs.tag}}
+        working-directory: apiserver
       - name: Publish dockerimage to docker hub
         run: docker push ${{secrets.DOCKER_USERNAME}}/apisever:${{steps.vars.outputs.tag}}
       - name: Change Tag to the latest
@@ -42,6 +43,7 @@ jobs:
         run: docker push ${{secrets.DOCKER_USERNAME}}/apisever:latest
       - name: Generate deployment package
         run: zip -r deploy.zip . -x '*.git*'
+        working-directory: apiserver
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v20
         with:
