@@ -1,0 +1,10 @@
+.airportobject {
+    width: flex;
+    height: flex;
+    margin: auto;
+    padding: 10px 10px 10px 10px;
+    text-align: left;
+    border:blueviolet;
+    border-width: thin;
+    border-style: solid;
+}
