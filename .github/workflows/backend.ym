@@ -1,0 +1,54 @@
+name: Deploy Rest API Server
+on:
+  push:
+    branches:
+      - main
+    paths: 
+      - 'apiserver/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [ 11 ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'adopt'
+          cache: gradle
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew build
+      - name: Get the version
+        id: vars
+        run: echo ::set-output name=tag::$(echo ${GITHUB_SHA:10})
+      - name: Docker login
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run : docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/apisever:${{steps.vars.outputs.tag}}
+      - name: Publish dockerimage to docker hub
+        run: docker push ${{secrets.DOCKER_USERNAME}}/apisever:${{steps.vars.outputs.tag}}
+      - name: Change Tag to the latest
+        run: docker tag ${{secrets.DOCKER_USERNAME}}/apisever:${{steps.vars.outputs.tag}} ${{secrets.DOCKER_USERNAME}}/server-sample:latest
+      - name: Publish dockerimage to docker hub
+        run: docker push ${{secrets.DOCKER_USERNAME}}/apisever:latest
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x '*.git*'
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          application_name: docker-rest-api
+          environment_name: Dockerrestapi-env
+          existing_bucket_name: elasticbeanstalk-us-west-2-748725899146
+          region: us-west-2
+          version_label: ${{ github.sha }}
+          deployment_package: deploy.zip
