@@ -5,7 +5,7 @@ function Table({tableData}){
             <thead>
                 <tr>
                     <th>S.N</th>
-                    <th>Waypoint</th>
+                    <th>Waypoint </th>
                     <th>Frequency</th>
                 </tr>
             </thead>
