@@ -47,17 +47,12 @@ public class ServiceHandler {
 
         //Create a new HttpEntity
         final HttpEntity<List<WayPointsModel>> entity = new HttpEntity<List<WayPointsModel>>(headers);
-
-        // String uri = http://my-rest-url.org/rest/account/{account};
-
-
         ResponseEntity<List<WayPointsModel>> response
                 = restTemplate.exchange("https://open-atms.airlab.aero/api/v1/airac/sids/airport/{icao}", HttpMethod.GET, entity,
                 new ParameterizedTypeReference<List<WayPointsModel>>() {
                 }, icao);
 
         List<AirpotModel> top2 = getTop2Waypoints(response.getBody());
-
         return top2; //response.getBody();
     }
 
