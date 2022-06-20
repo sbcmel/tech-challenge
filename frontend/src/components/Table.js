@@ -5,8 +5,8 @@ function Table({tableData}){
             <thead>
                 <tr>
                     <th>S.N</th>
-                    <th>Airport</th>
-                    <th>Waypoints</th>
+                    <th>Waypoint</th>
+                    <th>Frequency</th>
                 </tr>
             </thead>
             <tbody>
